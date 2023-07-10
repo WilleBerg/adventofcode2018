@@ -9,7 +9,6 @@ const ARRAY_HEIGHT: usize = 360;
 
 fn main() {
     let input = read_input("input.txt");
-    println!("Here");
     run_a(&input);
 }
 
@@ -18,16 +17,13 @@ fn run_a(input: &Vec<String>) {
     let point_list: Vec<Point> = input.iter()
         .map(|line| { id += 1; Point::build(line, id) })
         .collect();
-    println!("Here1");
 
     let mut grid: Box<[[(u32, u32); ARRAY_WIDTH]; ARRAY_HEIGHT]> = Box::new([[(0, 0); ARRAY_WIDTH]; ARRAY_HEIGHT]);
-    println!("Here2");
 
     for point in &point_list {
         grid[point.y as usize][point.x as usize] = (point.unique_id, 0);
         expand_grid(&mut grid, &point);
     }
-    println!("Here3");
 
     let mut set: HashSet<u32> = HashSet::new();
     let mut x = 0;
@@ -40,6 +36,7 @@ fn run_a(input: &Vec<String>) {
             }
             x += 1;
         }
+        x = 0;
         y += 1;
     }
 
@@ -47,8 +44,8 @@ fn run_a(input: &Vec<String>) {
     let mut largest = 0;
     let mut valu = 0;
     for row in grid.iter() {
-        for (val, _) in row.iter() {
-            print!("{}, ", val);
+        for (val, _range) in row.iter() {
+            // print!(" {} ", val);
             if set.contains(val) {
                 continue;
             }
@@ -62,10 +59,10 @@ fn run_a(input: &Vec<String>) {
                 valu = *val;
             }
         }
-        println!();
+        // println!();
     }
 
-    println!("{}, {}", largest, valu);
+    // println!("{}, {}", largest, valu);
 }
 
 fn expand_grid(grid: &mut Box<[[(u32, u32); ARRAY_WIDTH]; ARRAY_HEIGHT]>, point: &Point) {
